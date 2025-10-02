@@ -8,12 +8,12 @@ session_start();
 require_once('includes/ringcentral-functions.inc');
 require_once('includes/ringcentral-php-functions.inc');
 
-show_errors();
+//show_errors();
 
 function show_form($message, $print_again = false) {
     page_header(); ?>
     <form action="" method="post" enctype="multipart/form-data">
-        <table class="EditTable" >
+        <table class="EditTable">
             <tr class="CustomTable">
                 <td colspan="2" class="CustomTableFullCol">
                     <img src="images/rc-logo.png"/>
@@ -29,67 +29,36 @@ function show_form($message, $print_again = false) {
             </tr>
             <tr class="CustomTable">
                 <td class="left_col">
-                    <p style='display: inline;'>Phone # for log:</p>
+                    <p style='display: inline;'>Starts with:</p>
                 </td>
                 <td class="right_col">
-                    <input type="text" name="log_number">
+                    <input type="text" name="startsWith"><br/>
+                    If specified, only contacts which 'First name' or 'Last name' start
+                    with the mentioned substring will be returned. Case-insensitive
                 </td>
             </tr>
             <tr class="CustomTable">
                 <td class="left_col">
-                    <p style='display: inline;'>Call Direction:</p>
+                    <p style='display: inline;'>Sort Results By:</p>
                 </td>
                 <td class="right_col">
-                    <select name="call_direction">
-                        <option value="Inbound" selected>In Bound</option>
-                        <option value="Outbound">Out Bound</option>
-                        <option value="">Both Directions</option>
+                    <select name="sortBy">
+                        <option value="" selected>No Sorting</option>
+                        <option value="FirstName">First Name</option>
+                        <option value="LastName">Last Name</option>
+                        <option value="Company">Company</option>
                     </select>
                 </td>
             </tr>
             <tr class="CustomTable">
-                <td class="left_col">
-                    <p style='display: inline;'>Call Types:</p>
-                </td>
-                <td class="right_col">
-                    <select name="call_types">
-                            <option value="Voice" selected>Voice</option>
-                            <option value="Fax">Fax</option>
-                            <option value="">Both Voice & Fax</option>
-                    </select>
-                </td>
-            </tr>
-            <tr class="CustomTable">
-                <td class="left_col">
-                    <p style='display: inline;'>Call Log Details:</p>
-                </td>
-                <td class="right_col">
-                    <select name="call_details">
-                        <option value="Simple" selected>Simple</option>
-                        <option value="Detailed">Detailed</option>
-                    </select>
-                </td>
-            </tr>
-            <tr class="CustomTable">
-                <td class="left_col">
-                    <p style='display: inline;'>Start Date for log:</p>
-                </td>
-                <td class="right_col">
-                    <input type="text" name="start_date" placeholder="YYYY-MM-DD format">
-                </td>
-            </tr>
-            <tr class="CustomTable">
-                <td class="left_col">
-                    <p style='display: inline;'>End Date for log: </p>
-                </td>
-                <td class="right_col">
-                    <input type="text" name="end_date" placeholder="YYYY-MM-DD format">
-                </td>
-            </tr>
-            <tr class="CustomTable">
-                <td colspan="2" class="CustomTableFullCol">
+                <td class="CustomTableFullCol">
                     <br/>
-                    <input type="submit" class="submit_button" value="   Retrieve Logs   " name="get_logs">
+                    <input type="submit" class="submit_button" value="   Retrieve Company Contacts   "
+                           name="get_company"/>
+                </td>
+                <td class="CustomTableFullCol">
+                    <br/>
+                    <input type="submit" class="submit_button" value="   Retrieve Guest Contacts   " name="get_guests">
                 </td>
             </tr>
             <tr class="CustomTable">
@@ -102,43 +71,27 @@ function show_form($message, $print_again = false) {
     <?php
 }
 
-function check_form() {
-    show_errors();
-
+function check_form($list) {
     $print_again = false;
     $message = "";
 
-    /* ============================================ */
-    /* ====== START data integrity checks ========= */
-    /* ============================================ */
-
-    $log_number = strip_tags($_POST['log_number']);
-    $direction = strip_tags($_POST['call_direction']);
-    $call_details = strip_tags($_POST['call_details']);
-    $call_type = strip_tags($_POST['call_types']);
-    $start_date = strip_tags($_POST['start_date']);
-    $end_date = strip_tags($_POST['end_date']);
-
-    if ($log_number == "" ) {
-        $print_again = true;
-        $message = "No phone number has been provided, how can we retrieve logs?";
+    $sortBy = strip_tags($_POST['sortBy']);
+    $startsWith = strip_tags($_POST['startsWith']);
+    if ($list == "Company") {
+        get_company_contacts($startsWith, $sortBy);
     }
-
-    /* ========================================== */
-    /* ====== END data integrity checks ========= */
-    /* ========================================== */
-    if ($print_again) {
-        show_form($message, $print_again);
-    } else {
-        get_logs($log_number, $direction, $call_type, $call_details, $start_date, $end_date);
+    if ($list == "Guests") {
+        get_guest_contacts($startsWith, $sortBy);
     }
 }
 
 /* ============= */
 /*  --- MAIN --- */
 /* ============= */
-if (isset($_POST['get_logs'])) {
-    check_form();
+if (isset($_POST['get_company'])) {
+    check_form("Company");
+} elseif (isset($_POST['get_guests'])) {
+    check_form("Guests");
 } else {
     $message = "Please provide the needed information.";
     show_form($message);
