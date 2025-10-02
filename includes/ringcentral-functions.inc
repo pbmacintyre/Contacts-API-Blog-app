@@ -6,7 +6,7 @@
 /* ================= */
 
 function app_name() {
-	return "List Call Log Blog Demo App";
+	return "Contacts Blog Demo App";
 }
 
 /* ================== */
