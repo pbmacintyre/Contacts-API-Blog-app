@@ -68,7 +68,7 @@ function get_company_contacts($startsWith, $sortBy) {
             });
             foreach ($records as $record) {
                 // echo_spaces("Response record", $record);
-                if ($record->status == 'Enabled') {
+//                if ($record->status == 'Enabled') {
                     echo_spaces("Contact ID", $record->id);
                     echo_spaces("Contact Status", $record->status);
                     echo_spaces("Contact name", $record->firstName . ' ' . $record->lastName);
@@ -101,7 +101,7 @@ function get_company_contacts($startsWith, $sortBy) {
                     }
 
 
-                }
+//                }
             }
         } else {
             echo_spaces("No contact records found for provided parameters.");
