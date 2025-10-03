@@ -53,12 +53,11 @@ function show_form($message, $print_again = false) {
             <tr class="CustomTable">
                 <td class="CustomTableFullCol">
                     <br/>
-                    <input type="submit" class="submit_button" value="   Retrieve Company Contacts   "
-                           name="get_company"/>
+                    <input type="submit" class="submit_button" value="Retrieve Company Contacts" name="get_company"/>
                 </td>
                 <td class="CustomTableFullCol">
                     <br/>
-                    <input type="submit" class="submit_button" value="   Retrieve Guest Contacts   " name="get_guests">
+                    <input type="submit" class="submit_button" value="Retrieve Guest Contacts" name="get_guests">
                 </td>
             </tr>
             <tr class="CustomTable">

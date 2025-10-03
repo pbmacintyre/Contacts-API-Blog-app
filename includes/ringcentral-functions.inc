@@ -117,8 +117,8 @@ function get_guest_contacts($startsWith, $sortBy) {
     $platform = $controller['platform'];
 
     $queryParams = array(
-//		'startsWith' => 'A',
-		'sortBy' => 'LastName',
+//		'startsWith' => 'Central',
+		'sortBy' => 'Company',
     );
 
     $endpoint = "/restapi/v1.0/account/~/extension/~/address-book/contact";
@@ -126,17 +126,17 @@ function get_guest_contacts($startsWith, $sortBy) {
     try {
         $resp = $platform->get($endpoint, $queryParams);
 //        $resp = $platform->get($endpoint);
-		echo_spaces("Response", $resp->json());
+//		echo_spaces("Response", $resp->json());
 //		echo_spaces("Response record", $resp->json()->records);
         $records = $resp->json()->records; // array of objects
-//        if (count($records) >= 1) {
+        if (count($records) >= 1) {
 //            usort($records, function($a, $b) {
 //                $lastA = $a->lastName ?? '';
 //                $lastB = $b->lastName ?? '';
 //                return strcmp($lastA, $lastB);
 //            });
-//            foreach ($records as $record) {
-//                // echo_spaces("Response record", $record);
+            foreach ($records as $record) {
+                 echo_spaces("Response record", $record);
 //                if ($record->status == 'Enabled') {
 //                    echo_spaces("Contact ID", $record->id);
 //                    echo_spaces("Contact Status", $record->status);
@@ -168,13 +168,11 @@ function get_guest_contacts($startsWith, $sortBy) {
 <!--                    --><?php //} else {
 //                        echo_spaces("Contact profile image not found.", "",2);;
 //                    }
-//
-//
 //                }
-//            }
-//        } else {
-//            echo_spaces("No contact records found for provided parameters.");
-//        }
+            }
+        } else {
+            echo_spaces("No contact records found for provided parameters.");
+        }
     } catch (\RingCentral\SDK\Http\ApiException $e) {
         // craft a friendly error message here.
         echo_spaces("There was an error retrieving the contacts list, Please try again later", $e->getMessage());
